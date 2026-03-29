@@ -357,7 +357,7 @@ main{max-width:720px;margin:0 auto;padding:1.5rem 1rem 4rem;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ── Config ────────────────────────────────────────────────────────────────
-const WHATSAPP_NUMBER = '33XXXXXXXXX';
+const WHATSAPP_NUMBER = '971503078039';
 
 // ── Table widget ───────────────────────────────────────────────────────────
 let tableConfirmed = false;
@@ -603,7 +603,7 @@ function sendWhatsApp() {
   btn.innerHTML = '<span>⏳</span> Génération PDF…';
   btn.className = 'btn-send sending';
 
-  const { plainText, agent, tenant, dateVal, missingCount } = buildSummary();
+  const { plainText, agent, tenant, dateVal, missingCount, guestsN } = buildSummary();
 
   setTimeout(() => {
     try {
