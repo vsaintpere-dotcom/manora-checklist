@@ -1,6 +1,902 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<title>Chalet Manora — Checklist Ménage & État des Lieux</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#F7F4EF; --snow:#FDFCFA; --pine:#2C3E2D; --pine-lt:#3D5C3F;
+  --gold:#B8965A; --gold-lt:#D4AC6E; --stone:#8C8278; --stone-lt:#C4BDB5;
+  --smoke:#EAE6DF; --danger:#C0392B; --ok:#2C7A4B; --warn:#B8730A; --radius:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--pine);min-height:100vh;font-size:15px;line-height:1.6;}
+
+/* HEADER */
+header{background:var(--pine);color:var(--cream);padding:2rem 1.5rem 1.75rem;text-align:center;position:relative;}
+.header-bg{position:absolute;inset:0;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");}
+.header-inner{position:relative;z-index:1;}
+.logo-line{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:0.4rem;}
+.logo-ornament{width:36px;height:1px;background:var(--gold);}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:600;color:var(--snow);}
+.header-sub{font-size:0.75rem;font-weight:300;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-lt);margin-top:0.3rem;}
+
+/* META FIELDS */
+.header-meta{margin-top:1.25rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.meta-field{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.meta-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone-lt);}
+.meta-input{
+  background:rgba(255,255,255,0.12);
+  border:1.5px solid rgba(255,255,255,0.25);
+  border-radius:8px;
+  color:#ffffff;
+  padding:10px 14px;
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;
+  min-width:150px;
+  width:100%;
+  max-width:200px;
+  text-align:center;
+  outline:none;
+  -webkit-appearance:none;
+  appearance:none;
+  position:relative;
+  z-index:2;
+}
+.meta-input:focus{border-color:var(--gold);background:rgba(255,255,255,0.2);}
+.meta-input::placeholder{color:rgba(255,255,255,0.4);}
+
+/* PROGRESS */
+.progress-wrap{background:var(--pine);padding:0.7rem 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.18);}
+.progress-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:1rem;}
+.progress-bar-track{flex:1;height:6px;background:rgba(255,255,255,0.15);border-radius:99px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-lt));border-radius:99px;transition:width 0.4s ease;width:0%;}
+.progress-text{color:var(--snow);font-size:0.85rem;font-weight:500;white-space:nowrap;min-width:60px;text-align:right;}
+
+/* MAIN */
+main{max-width:720px;margin:0 auto;padding:1.5rem 1rem 4rem;}
+
+/* SECTION */
+.section{margin-bottom:1.25rem;background:var(--snow);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(44,62,45,0.07);border:1px solid var(--smoke);}
+.section-header{background:var(--pine);padding:0.75rem 1.25rem;display:flex;align-items:center;gap:0.7rem;}
+.section-icon{width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.section-title{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;color:var(--snow);letter-spacing:0.03em;}
+.section-count{margin-left:auto;font-size:0.72rem;color:var(--stone-lt);font-weight:300;}
+.section-items{padding:0.25rem 0;}
+
+/* ITEM */
+.item{display:flex;align-items:flex-start;gap:0.7rem;padding:0.8rem 1.25rem;cursor:pointer;border-bottom:1px solid var(--smoke);position:relative;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;-webkit-user-select:none;}
+.item:last-child{border-bottom:none;}
+.item:active{background:#F0EDE6;}
+.item.checked{background:#F0FAF4;}
+.item.checked .item-label{color:var(--stone);}
+.item.checked::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--ok);border-radius:0 2px 2px 0;}
+.checkbox-wrap{flex-shrink:0;margin-top:2px;}
+.checkbox-wrap input[type="checkbox"]{display:none;}
+.checkbox-custom{width:22px;height:22px;border:2px solid var(--stone-lt);border-radius:6px;display:flex;align-items:center;justify-content:center;transition:all 0.15s;background:white;}
+.item.checked .checkbox-custom{background:var(--ok);border-color:var(--ok);}
+.checkbox-check{opacity:0;transform:scale(0.5);transition:all 0.2s;color:white;font-size:13px;font-weight:700;}
+.item.checked .checkbox-check{opacity:1;transform:scale(1);}
+.item-content{flex:1;min-width:0;}
+.item-label{font-size:0.88rem;color:var(--pine);font-weight:400;line-height:1.45;pointer-events:none;}
+.item-label strong{font-weight:500;}
+.item-badge{display:inline-block;font-size:0.68rem;padding:1px 6px;border-radius:99px;margin-left:5px;font-weight:500;vertical-align:middle;}
+.badge-qty{background:#EBF4FF;color:#1A5276;}
+.badge-warn{background:#FEF3CD;color:var(--warn);}
+.badge-important{background:#FDEDEC;color:var(--danger);}
+
+/* NOTE BUTTON */
+.item-note-btn{flex-shrink:0;background:none;border:1px solid var(--stone-lt);border-radius:6px;padding:5px 9px;font-size:0.72rem;color:var(--stone);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;min-height:34px;min-width:58px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;pointer-events:auto;}
+.item-note-btn.has-note{border-color:var(--gold);color:var(--gold);background:rgba(184,150,90,0.07);}
+.item-note-area{display:none;padding:0.5rem 0 0.25rem;}
+.item-note-area.open{display:block;}
+.item-note-area textarea{width:100%;border:1px solid var(--stone-lt);border-radius:8px;padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--pine);resize:vertical;min-height:58px;outline:none;background:var(--cream);pointer-events:auto;-webkit-user-select:text;user-select:text;}
+.item-note-area textarea:focus{border-color:var(--gold);}
+
+/* COUNTER */
+.counter-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0;pointer-events:auto;}
+.counter-input{width:60px;border:1.5px solid var(--stone-lt);border-radius:7px;padding:6px 6px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;color:var(--pine);text-align:center;outline:none;background:white;-moz-appearance:textfield;-webkit-appearance:none;appearance:none;touch-action:manipulation;pointer-events:auto;-webkit-user-select:text;user-select:text;}
+.counter-input::-webkit-inner-spin-button,.counter-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.counter-input.ok{border-color:var(--ok);background:#F0FAF4;color:var(--ok);}
+.counter-input.miss{border-color:var(--danger);background:#FDEDEC;color:var(--danger);}
+.counter-status{font-size:0.72rem;font-weight:500;min-width:24px;}
+.counter-status.ok{color:var(--ok);}
+.counter-status.miss{color:var(--danger);}
+
+/* BUTTONS */
+.actions{margin-top:2rem;display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;}
+.btn-primary{background:var(--pine);color:var(--snow);border:none;border-radius:8px;padding:0.9rem 2rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:0.5rem;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.btn-secondary{background:transparent;color:var(--pine);border:1.5px solid var(--stone-lt);border-radius:8px;padding:0.9rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+
+/* COMPLETION BADGE */
+.completion-badge{display:none;text-align:center;padding:1.5rem 1rem;background:var(--snow);border-radius:var(--radius);margin-top:1.25rem;border:2px solid var(--ok);}
+.completion-badge.show{display:block;}
+.completion-badge-icon{font-size:2rem;margin-bottom:0.4rem;}
+.completion-badge h3{font-family:'Playfair Display',serif;color:var(--ok);font-size:1.1rem;margin-bottom:0.2rem;}
+.completion-badge p{color:var(--stone);font-size:0.82rem;}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(30,40,30,0.6);z-index:200;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;}
+.overlay.open{display:flex;}
+.modal{background:var(--snow);border-radius:var(--radius);max-width:580px;width:100%;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.modal-header{background:var(--pine);color:var(--snow);padding:1.1rem 1.4rem;display:flex;align-items:center;justify-content:space-between;border-radius:var(--radius) var(--radius) 0 0;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.05rem;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.4rem;cursor:pointer;line-height:1;touch-action:manipulation;padding:4px 8px;}
+.modal-body{padding:1.25rem;}
+.summary-info{background:var(--cream);border-radius:8px;padding:0.9rem 1rem;margin-bottom:1.25rem;font-size:0.83rem;line-height:1.9;border-left:3px solid var(--gold);}
+.summary-section{margin-bottom:1.1rem;}
+.summary-section-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone);font-weight:500;margin-bottom:0.4rem;padding-bottom:3px;border-bottom:1px solid var(--smoke);}
+.summary-item{display:flex;align-items:flex-start;gap:0.5rem;font-size:0.82rem;padding:2px 0;}
+.summary-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.dot-ok{background:var(--ok);}
+.dot-missing{background:var(--danger);}
+.dot-warn{background:var(--warn);}
+.summary-missing{background:#FDEDEC;border-radius:8px;padding:0.7rem 0.9rem;margin-top:0.9rem;font-size:0.82rem;}
+.summary-missing-title{font-weight:500;color:var(--danger);margin-bottom:0.4rem;}
+.modal-footer{padding:0.9rem 1.4rem;border-top:1px solid var(--smoke);display:flex;gap:0.6rem;justify-content:flex-end;flex-wrap:wrap;}
+.btn-send{background:var(--pine);color:white;border:none;border-radius:7px;padding:0.7rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:0.5rem;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.btn-send:disabled{opacity:0.6;cursor:not-allowed;}
+.btn-send.sending{background:var(--stone);}
+.btn-send.sent{background:var(--ok);}
+.send-status{text-align:left;padding:0.75rem 1rem;font-size:0.82rem;border-radius:6px;display:none;margin:0.5rem 1.4rem 0.9rem;line-height:1.7;}
+.send-status.ok{display:block;background:#F0FAF4;color:var(--ok);}
+.send-status.err{display:block;background:#FDEDEC;color:var(--danger);}
+
+@media(max-width:480px){
+  main{padding:1rem 0.75rem 3rem;}
+  .item{padding:0.75rem 1rem;}
+  .section-header{padding:0.7rem 1rem;}
+  .meta-input{min-width:130px;}
+}
+
+/* TABLE WIDGET */
+.table-widget{background:var(--snow);border-radius:var(--radius);border:1px solid var(--smoke);margin-bottom:1.25rem;overflow:hidden;box-shadow:0 1px 4px rgba(44,62,45,0.07);}
+.table-widget-header{background:var(--pine);padding:0.75rem 1.25rem;display:flex;align-items:center;gap:0.7rem;}
+.table-widget-header .section-icon{width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.table-widget-header .section-title{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;color:var(--snow);}
+.table-widget-body{padding:1rem 1.25rem;}
+.table-row{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+.table-label{font-size:0.88rem;color:var(--pine);font-weight:400;flex-shrink:0;}
+.guests-input{width:70px;border:1.5px solid var(--stone-lt);border-radius:8px;padding:8px 10px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;color:var(--pine);text-align:center;outline:none;background:white;-moz-appearance:textfield;-webkit-appearance:none;appearance:none;touch-action:manipulation;-webkit-user-select:text;user-select:text;}
+.guests-input::-webkit-inner-spin-button,.guests-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.guests-input:focus{border-color:var(--gold);}
+.table-result{margin-top:0.75rem;padding:0.75rem 1rem;border-radius:8px;font-size:0.88rem;font-weight:500;display:none;line-height:1.5;}
+.table-result.show{display:block;}
+.table-result.ok{background:#F0FAF4;color:var(--ok);border-left:3px solid var(--ok);}
+.table-result.warn{background:#FEF3CD;color:var(--warn);border-left:3px solid var(--gold);}
+.table-result.peak{background:#FAEEDA;color:var(--warn);border-left:3px solid var(--warn);}
+.table-confirm{margin-top:0.75rem;display:none;}
+.table-confirm.show{display:flex;align-items:center;gap:0.7rem;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.table-confirm-box{width:22px;height:22px;border:2px solid var(--stone-lt);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:white;transition:all 0.15s;}
+.table-confirm-box.checked{background:var(--ok);border-color:var(--ok);}
+.table-confirm-check{opacity:0;transform:scale(0.5);transition:all 0.2s;color:white;font-size:13px;font-weight:700;}
+.table-confirm-box.checked .table-confirm-check{opacity:1;transform:scale(1);}
+.table-confirm-label{font-size:0.88rem;color:var(--pine);user-select:none;-webkit-user-select:none;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-bg"></div>
+  <div class="header-inner">
+    <div class="logo-line">
+      <div class="logo-ornament"></div>
+      <h1>Chalet Manora</h1>
+      <div class="logo-ornament"></div>
+    </div>
+    <div class="header-sub">Checklist Ménage & État des Lieux · La Tania, Courchevel</div>
+    <div class="header-meta">
+      <div class="meta-field">
+        <span class="meta-label">Locataire sortant</span>
+        <input class="meta-input" id="tenant-out" type="text" placeholder="Nom du groupe" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+      </div>
+      <div class="meta-field">
+        <span class="meta-label">Date & heure</span>
+        <input class="meta-input" id="check-date" type="text" readonly>
+      </div>
+      <div class="meta-field">
+        <span class="meta-label">Agent responsable</span>
+        <input class="meta-input" id="agent-name" type="text" placeholder="Votre prénom" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false">
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-bar-track"><div class="progress-bar-fill" id="progress-fill"></div></div>
+    <div class="progress-text" id="progress-text">0 / 0</div>
+  </div>
+</div>
+
+<main>
+
+<!-- TABLE WIDGET -->
+<div class="table-widget">
+  <div class="table-widget-header">
+    <div class="section-icon">🪑</div>
+    <div class="section-title">Configuration de la table</div>
+  </div>
+  <div class="table-widget-body">
+    <div class="table-row">
+      <span class="table-label">Nombre de personnes attendues :</span>
+      <input class="guests-input" id="guests-input" type="number" inputmode="numeric" min="1" max="12" placeholder="nb" oninput="updateTable(this.value)">
+    </div>
+    <div class="table-result" id="table-result"></div>
+    <div class="table-confirm" id="table-confirm" onclick="toggleTableConfirm()">
+      <div class="table-confirm-box" id="table-confirm-box"><span class="table-confirm-check">✓</span></div>
+      <span class="table-confirm-label" id="table-confirm-label"></span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 1 : Kit d'accueil -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🎁</div><div class="section-title">Kit d'accueil</div><div class="section-count" id="count-0"></div></div>
+  <div class="section-items" data-section="0">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Café & thé dans la boîte d'accueil <span class="item-badge badge-qty">1 kit complet</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Chocolats dans la boîte d'accueil</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Carte de bienvenue Manora dans la boîte</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Bouchon Manora dans la boîte</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">1 grande bouteille d'eau <strong>plate</strong> — posée à côté de la boîte d'accueil</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">1 grande bouteille d'eau <strong>gazeuse</strong> — posée à côté de la boîte d'accueil</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 2 : Cuisine -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🍽️</div><div class="section-title">Cuisine & Vaisselle</div><div class="section-count" id="count-1"></div></div>
+  <div class="section-items" data-section="1">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Nouvelle éponge encore emballée posée à l'évier <span class="item-badge badge-warn">Neuve obligatoire</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Propreté assiettes, verres, couverts, casseroles — vérifiés un à un</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Appareil à raclette propre (lavé si nécessaire) <span class="item-badge badge-warn">À vérifier</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Frigo vide — aucune nourriture laissée</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">2 torchons propres en place <span class="item-badge badge-qty">× 2</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Laisser couler l'eau chaude 5 min dans l'évier <span class="item-badge badge-warn">Anti-légionelle</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Propreté intérieur du lave-vaisselle — filtre, bras, parois</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 3 : Inventaire -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">📋</div><div class="section-title">État des lieux — Inventaire</div><div class="section-count" id="count-2"></div></div>
+  <div class="section-items" data-section="2">
+    <div class="item counter-item" onclick="toggleCounter(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Verres <span class="item-badge badge-qty">14 attendus</span></div></div><div class="counter-wrap" onclick="event.stopPropagation()"><input class="counter-input" type="number" inputmode="numeric" min="0" max="20" placeholder="nb" oninput="checkCounter(this,14)"><span class="counter-status"></span></div></div>
+    <div class="item counter-item" onclick="toggleCounter(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Flûtes à champagne <span class="item-badge badge-qty">14 attendues</span></div></div><div class="counter-wrap" onclick="event.stopPropagation()"><input class="counter-input" type="number" inputmode="numeric" min="0" max="20" placeholder="nb" oninput="checkCounter(this,14)"><span class="counter-status"></span></div></div>
+    <div class="item counter-item" onclick="toggleCounter(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Couteaux <span class="item-badge badge-qty">14 attendus</span></div></div><div class="counter-wrap" onclick="event.stopPropagation()"><input class="counter-input" type="number" inputmode="numeric" min="0" max="20" placeholder="nb" oninput="checkCounter(this,14)"><span class="counter-status"></span></div></div>
+    <div class="item counter-item" onclick="toggleCounter(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Fourchettes <span class="item-badge badge-qty">14 attendues</span></div></div><div class="counter-wrap" onclick="event.stopPropagation()"><input class="counter-input" type="number" inputmode="numeric" min="0" max="20" placeholder="nb" oninput="checkCounter(this,14)"><span class="counter-status"></span></div></div>
+    <div class="item counter-item" onclick="toggleCounter(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Cuillères <span class="item-badge badge-qty">14 attendues</span></div></div><div class="counter-wrap" onclick="event.stopPropagation()"><input class="counter-input" type="number" inputmode="numeric" min="0" max="20" placeholder="nb" oninput="checkCounter(this,14)"><span class="counter-status"></span></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">TV salon — fonctionne et branchements vérifiés <span class="item-badge badge-important">Obligatoire</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Problème détecté ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Wifi vérifié — connexion fonctionnelle <span class="item-badge badge-important">Obligatoire</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Problème de connexion ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Enceinte Marshall — présente et fonctionne</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 4 : Chambres -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🛏️</div><div class="section-title">Chambres & Linge</div><div class="section-count" id="count-3"></div></div>
+  <div class="section-items" data-section="3">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Serviettes moyennes par chambre <span class="item-badge badge-qty">× 2 / chambre</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Grandes serviettes par chambre <span class="item-badge badge-qty">× 2 / chambre</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Peignoirs par chambre <span class="item-badge badge-qty">× 2 / chambre</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Chaussons par chambre <span class="item-badge badge-qty">× 2 / chambre</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Draps & taies d'oreiller — aucune tache, impeccables <span class="item-badge badge-important">Vérifier chaque lit</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Tache détectée ? Chambre concernée ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Toutes les ampoules fonctionnent dans chaque chambre <span class="item-badge badge-warn">Vérifier chacune</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Ampoule HS ? Chambre concernée ?"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 5 : Salle de bain -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🧴</div><div class="section-title">Salle de bain & Cosmétiques Nuxe</div><div class="section-count" id="count-4"></div></div>
+  <div class="section-items" data-section="4">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Propreté générale — sol, douche, lavabo, miroir, grilles aération VMC <span class="item-badge badge-important">Vérifier chaque SDB</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="SDB concernée / problème détecté ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Sèche-cheveux présent dans chaque salle de bain <span class="item-badge badge-qty">1 / SDB</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="SDB concernée ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Niveaux gels douche & savons vérifiés dans chaque salle de bain</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="SDB à recompléter ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Produits Nuxe positionnés dans le bon sens <span class="item-badge badge-warn">Étiquette visible</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Rouleaux de papier toilette en place dans chaque WC <span class="item-badge badge-qty">Chambres + entrée</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 6 : Sauna -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🔥</div><div class="section-title">Sauna & Local chauffe-eau</div><div class="section-count" id="count-5"></div></div>
+  <div class="section-items" data-section="5">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Porte du local chauffe-eau verrouillée <span class="item-badge badge-important">Sécurité</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Radiateur du sauna réglé sur <strong>20°C</strong> <span class="item-badge badge-warn">Température de veille</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Tapis de bain en place devant la douche du sauna</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+  </div>
+</div>
+
+<!-- SECTION 7 : Garage -->
+<div class="section">
+  <div class="section-header"><div class="section-icon">🚗</div><div class="section-title">Garage, Entrée & Sécurité</div><div class="section-count" id="count-6"></div></div>
+  <div class="section-items" data-section="6">
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Petite serviette pour les mains dans le WC de l'entrée</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Congélateur vide — aucune nourriture laissée</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Ampoules du garage vérifiées — toutes fonctionnelles</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Ampoule HS ?"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Lumière extérieure au-dessus du garage éteinte</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Place de parking déneigée et accessible</div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Remarque…"></textarea></div></div>
+    <div class="item" onclick="toggle(this,event)"><div class="checkbox-wrap"><input type="checkbox"><div class="checkbox-custom"><span class="checkbox-check">✓</span></div></div><div class="item-content"><div class="item-label">Escalier extérieur — pas de verglas <span class="item-badge badge-important">Sécurité</span></div></div><button class="item-note-btn" onclick="toggleNote(event,this)">+ Note</button><div class="item-note-area"><textarea placeholder="Traitement antiverglas effectué ?"></textarea></div></div>
+  </div>
+</div>
+
+<div class="completion-badge" id="completion-badge">
+  <div class="completion-badge-icon">✅</div>
+  <h3>Checklist complète !</h3>
+  <p>Cliquez sur "Résumé & Valider" pour envoyer le rapport sur WhatsApp.</p>
+</div>
+
+<div class="actions">
+  <button class="btn-primary" onclick="openSummary()"><span>📄</span> Résumé & Valider</button>
+  <button class="btn-secondary" onclick="resetAll()">Réinitialiser</button>
+</div>
+
+</main>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeOverlay(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title">Résumé de l'état des lieux</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" style="font-size:0.85rem;padding:0.6rem 1rem;" onclick="closeModal()">Fermer</button>
+      <button class="btn-send" id="btn-send" onclick="sendWhatsApp()"><span>📲</span> Envoyer sur WhatsApp</button>
+    </div>
+    <div id="send-status" class="send-status"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// ── Config ────────────────────────────────────────────────────────────────
+const WHATSAPP_NUMBER = '33XXXXXXXXX';
+
+// ── Table widget ───────────────────────────────────────────────────────────
+let tableConfirmed = false;
+
+function updateTable(val) {
+  const n = parseInt(val);
+  const result = document.getElementById('table-result');
+  const confirm = document.getElementById('table-confirm');
+  const confirmLabel = document.getElementById('table-confirm-label');
+
+  // Reset confirm when guests change
+  tableConfirmed = false;
+  document.getElementById('table-confirm-box').classList.remove('checked');
+  updateTableProgress();
+
+  if (!val || isNaN(n) || n < 1 || n > 12) {
+    result.className = 'table-result';
+    confirm.className = 'table-confirm';
+    return;
+  }
+
+  let rallonges, msg, cls;
+  if (n <= 8) {
+    rallonges = 0;
+    msg = `<strong>${n} personnes</strong> — Pas de rallonge. Table sans extension.`;
+    cls = 'ok';
+  } else if (n <= 10) {
+    rallonges = 1;
+    msg = `<strong>${n} personnes</strong> — Mettre <strong>1 rallonge</strong>.`;
+    cls = 'warn';
+  } else {
+    rallonges = 2;
+    msg = `<strong>${n} personnes</strong> — Mettre <strong>2 rallonges</strong>.`;
+    cls = 'peak';
+  }
+
+  result.innerHTML = msg;
+  result.className = `table-result show ${cls}`;
+
+  const action = rallonges === 0
+    ? 'Table configurée sans rallonge'
+    : `${rallonges === 1 ? '1 rallonge mise' : '2 rallonges mises'} en place et table vérifiée`;
+  confirmLabel.textContent = action;
+  confirm.className = 'table-confirm show';
+}
+
+function toggleTableConfirm() {
+  tableConfirmed = !tableConfirmed;
+  document.getElementById('table-confirm-box').classList.toggle('checked', tableConfirmed);
+  updateTableProgress();
+}
+
+function updateTableProgress() {
+  // Force a progress refresh so the table widget is included
+  updateProgress();
+}
+
+// ── Date auto ──────────────────────────────────────────────────────────────
+const now = new Date();
+document.getElementById('check-date').value =
+  now.toLocaleDateString('fr-FR') + ' · ' +
+  now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+
+const sectionTitles = [
+  "Kit d'accueil","Cuisine & Vaisselle","État des lieux — Inventaire",
+  "Chambres & Linge","Salle de bain & Cosmétiques",
+  "Sauna & Local chauffe-eau","Garage, Entrée & Sécurité"
+];
+
+// ── Toggle item ────────────────────────────────────────────────────────────
+function toggle(item, e) {
+  if (!e) return;
+  const t = e.target;
+  if (t.closest('.item-note-btn') || t.closest('.item-note-area') || t.closest('.counter-wrap')) return;
+  item.classList.toggle('checked');
+  item.querySelector('input[type=checkbox]').checked = item.classList.contains('checked');
+  updateProgress(); checkCompletion();
+}
+
+function toggleCounter(item, e) { if (e) e.stopPropagation(); }
+
+// ── Counter ────────────────────────────────────────────────────────────────
+function checkCounter(input, expected) {
+  const val = parseInt(input.value);
+  const statusEl = input.nextElementSibling;
+  const item = input.closest('.item');
+  if (isNaN(val) || input.value === '') {
+    input.className = 'counter-input'; statusEl.textContent = ''; statusEl.className = 'counter-status';
+    item.classList.remove('checked'); item.querySelector('input[type=checkbox]').checked = false;
+  } else if (val === expected) {
+    input.className = 'counter-input ok'; statusEl.textContent = '✓'; statusEl.className = 'counter-status ok';
+    item.classList.add('checked'); item.querySelector('input[type=checkbox]').checked = true;
+  } else {
+    input.className = 'counter-input miss';
+    statusEl.textContent = val < expected ? `−${expected-val}` : `+${val-expected}`;
+    statusEl.className = 'counter-status miss';
+    item.classList.add('checked'); item.querySelector('input[type=checkbox]').checked = true;
+  }
+  updateProgress(); checkCompletion();
+}
+
+// ── Note ───────────────────────────────────────────────────────────────────
+function toggleNote(e, btn) {
+  e.stopPropagation(); e.preventDefault();
+  const area = btn.nextElementSibling;
+  const open = area.classList.toggle('open');
+  btn.textContent = open ? '− Note' : '+ Note';
+  if (open) setTimeout(() => area.querySelector('textarea').focus(), 80);
+  const ta = area.querySelector('textarea');
+  if (!ta._bound) {
+    ta._bound = true;
+    ta.addEventListener('input', () => {
+      btn.classList.toggle('has-note', ta.value.trim().length > 0);
+    });
+  }
+}
+
+// ── Progress ──────────────────────────────────────────────────────────────
+function updateProgress() {
+  const all = document.querySelectorAll('.item');
+  const done = document.querySelectorAll('.item.checked');
+  // +1 for table widget if guests entered, +1 if confirmed
+  const guestsVal = document.getElementById('guests-input').value;
+  const hasGuests = guestsVal && parseInt(guestsVal) >= 1;
+  const extraTotal = hasGuests ? 1 : 0;
+  const extraDone  = (hasGuests && tableConfirmed) ? 1 : 0;
+  const total = all.length + extraTotal;
+  const totalDone = done.length + extraDone;
+  const pct = total ? (totalDone / total) * 100 : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = totalDone + ' / ' + total;
+  document.querySelectorAll('.section-items').forEach((sec, i) => {
+    const el = document.getElementById('count-' + i);
+    if (el) el.textContent = sec.querySelectorAll('.item.checked').length + ' / ' + sec.querySelectorAll('.item').length;
+  });
+}
+
+function checkCompletion() {
+  const all = document.querySelectorAll('.item');
+  const done = document.querySelectorAll('.item.checked');
+  document.getElementById('completion-badge').classList.toggle('show', all.length > 0 && done.length === all.length);
+}
+
+// ── Build summary data ─────────────────────────────────────────────────────
+function buildSummary() {
+  const agent  = document.getElementById('agent-name').value.trim() || '(non renseigne)';
+  const tenant = document.getElementById('tenant-out').value.trim() || '(non renseigne)';
+  const dateVal = document.getElementById('check-date').value;
+  const guestsVal = document.getElementById('guests-input').value;
+  const guestsN = parseInt(guestsVal) || 0;
+
+  // Table config line
+  let tableInfo = '';
+  let tableInfoPlain = '';
+  if (guestsN > 0) {
+    const r = guestsN <= 8 ? 0 : guestsN <= 10 ? 1 : 2;
+    const rLabel = r === 0 ? 'sans rallonge' : r === 1 ? '1 rallonge' : '2 rallonges';
+    const confirmedStr = tableConfirmed ? 'FAIT' : 'NON CONFIRME';
+    tableInfo = `<br><strong>Table :</strong> ${guestsN} pers. &mdash; ${rLabel} &mdash; <span style="color:${tableConfirmed ? 'var(--ok)' : 'var(--danger)'}">${confirmedStr}</span>`;
+    tableInfoPlain = `\nTable : ${guestsN} pers. - ${rLabel} - ${confirmedStr}`;
+  }
+
+  const all   = document.querySelectorAll('.item');
+  const done  = document.querySelectorAll('.item.checked');
+  const guestsExtra = guestsN > 0 ? 1 : 0;
+  const confirmedExtra = (guestsN > 0 && tableConfirmed) ? 1 : 0;
+  const totalItems = all.length + guestsExtra;
+  const totalDone  = done.length + confirmedExtra;
+  const missing = [];
+  let htmlSections = '';
+  let plainText = `CHALET MANORA - ETAT DES LIEUX\n`;
+  plainText += `Agent : ${agent}\nLocataire : ${tenant}\nDate : ${dateVal}${tableInfoPlain}\nAvancement : ${totalDone}/${totalItems}\n\n`;
+
+  document.querySelectorAll('.section-items').forEach((sec, si) => {
+    let sHtml = `<div class="summary-section"><div class="summary-section-title">${sectionTitles[si]}</div>`;
+    plainText += `\n── ${sectionTitles[si]} ──\n`;
+    sec.querySelectorAll('.item').forEach(item => {
+      const label = item.querySelector('.item-label').textContent.trim();
+      const ok    = item.classList.contains('checked');
+      const note  = item.querySelector('textarea')?.value?.trim() || '';
+      const ci    = item.querySelector('.counter-input');
+      let dotClass = ok ? 'dot-ok' : 'dot-missing';
+      let extra = '';
+      if (ci && ci.value !== '') {
+        const v = parseInt(ci.value); const diff = ci.nextElementSibling.textContent;
+        const col = ci.classList.contains('miss') ? 'var(--danger)' : 'var(--ok)';
+        extra = ` <strong style="color:${col}">→ ${v} trouvé(s)${diff?' ('+diff+')':''}</strong>`;
+        if (ci.classList.contains('miss')) dotClass = 'dot-warn';
+        plainText += `  ${ok?'[OK]':'[--]'} ${label} → ${v} trouvé(s)${diff?' ('+diff+')':''}\n`;
+      } else {
+        plainText += `  ${ok?'[OK]':'[--]'} ${label}\n`;
+      }
+      if (note) { extra += ` <em style="color:var(--stone);font-size:0.8em"> — ${note}</em>`; plainText += `      Note : ${note}\n`; }
+      if (!ok) missing.push(label);
+      sHtml += `<div class="summary-item"><div class="summary-dot ${dotClass}"></div><div>${label}${extra}</div></div>`;
+    });
+    sHtml += `</div>`;
+    htmlSections += sHtml;
+  });
+
+  // Add table missing if guests entered but not confirmed
+  if (guestsN > 0 && !tableConfirmed) missing.push(`Table (${guestsN} pers.) — configuration non confirmee`);
+
+  const missingHtml = missing.length > 0
+    ? `<div class="summary-missing"><div class="summary-missing-title">⚠ ${missing.length} point(s) non validé(s)</div>${missing.map(m=>`<div style="padding:2px 0">• ${m}</div>`).join('')}</div>`
+    : `<div style="background:#F0FAF4;border-radius:8px;padding:0.75rem 1rem;margin-top:0.9rem;font-size:0.83rem;color:var(--ok);font-weight:500;">✅ Tous les points validés — chalet prêt !</div>`;
+
+  if (missing.length > 0) { plainText += `\nPOINTS NON VALIDES :\n` + missing.map(m=>`- ${m}`).join('\n'); }
+  else { plainText += `\nTous les points ont ete valides.`; }
+
+  const summaryHtml = `
+    <div class="summary-info">
+      <strong>Agent :</strong> ${agent}<br>
+      <strong>Locataire :</strong> ${tenant}<br>
+      <strong>Date :</strong> ${dateVal}${tableInfo}<br>
+      <strong>Avancement :</strong> ${totalDone} / ${totalItems} points validés
+    </div>
+    ${htmlSections}${missingHtml}`;
+
+  return { summaryHtml, plainText, agent, tenant, dateVal, missingCount: missing.length, guestsN };
+}
+
+// ── Open modal ─────────────────────────────────────────────────────────────
+function openSummary() {
+  const { summaryHtml } = buildSummary();
+  document.getElementById('modal-body').innerHTML = summaryHtml;
+  const btn = document.getElementById('btn-send');
+  btn.innerHTML = '<span>📲</span> Envoyer sur WhatsApp';
+  btn.disabled = false; btn.className = 'btn-send';
+  document.getElementById('send-status').className = 'send-status';
+  document.getElementById('send-status').textContent = '';
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function closeOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+// ── Generate PDF + open WhatsApp ───────────────────────────────────────────
+function sendWhatsApp() {
+  const btn = document.getElementById('btn-send');
+  const statusEl = document.getElementById('send-status');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Génération PDF…';
+  btn.className = 'btn-send sending';
+
+  const { plainText, agent, tenant, dateVal, missingCount } = buildSummary();
+
+  setTimeout(() => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+      const GREEN  = [44, 122, 75];
+      const RED    = [192, 57, 43];
+      const ORANGE = [184, 115, 10];
+      const PINE   = [44, 62, 45];
+      const GOLD   = [184, 150, 90];
+      const GREY   = [140, 130, 120];
+      const LTGREY = [234, 230, 223];
+
+      const PW = 210, ML = 14, MR = 14, CW = PW - ML - MR;
+      let y = 0;
+
+      // Table config info for PDF
+      const gN = guestsN;
+      const rCount = gN <= 0 ? '' : gN <= 8 ? '0 rallonge' : gN <= 10 ? '1 rallonge' : '2 rallonges';
+      const tableStr = gN > 0 ? `  |  Table : ${gN} pers. - ${rCount} - ${tableConfirmed ? 'CONFIRME' : 'NON CONFIRME'}` : '';
+
+      // ── HEADER ──
+      doc.setFillColor(...PINE);
+      doc.rect(0, 0, PW, 38, 'F');
+      doc.setFillColor(...GOLD);
+      doc.rect(0, 38, PW, 1.2, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.setTextColor(255, 255, 255);
+      doc.text('CHALET MANORA', PW / 2, 14, { align: 'center' });
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(212, 172, 110);
+      doc.text('ÉTAT DES LIEUX & MÉNAGE · LA TANIA, COURCHEVEL', PW / 2, 21, { align: 'center' });
+
+      doc.setFillColor(60, 55, 50);
+      doc.setDrawColor(...GOLD);
+      doc.setLineWidth(0.3);
+      doc.roundedRect(ML, 26, CW, 9, 1.5, 1.5, 'S');
+      doc.setFontSize(8);
+      doc.setTextColor(255, 255, 255);
+      const infoText = `Agent : ${agent}   Locataire : ${tenant}   Date : ${dateVal.split(' ·')[0]}${tableStr}`;
+      doc.text(infoText, PW / 2, 31.5, { align: 'center' });
+
+      y = 46;
+
+      // ── STATUS BANNER ──
+      const allItems = document.querySelectorAll('.item');
+      const doneItems = document.querySelectorAll('.item.checked');
+      const pct = Math.round(doneItems.length / allItems.length * 100);
+      const bannerColor = missingCount === 0 ? GREEN : (missingCount <= 3 ? ORANGE : RED);
+      doc.setFillColor(...bannerColor);
+      doc.roundedRect(ML, y, CW, 9, 1.5, 1.5, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.setTextColor(255, 255, 255);
+      const statusTxt = missingCount === 0
+        ? `OK  Checklist complete - ${doneItems.length}/${allItems.length} points valides (100%)`
+        : `!   ${doneItems.length}/${allItems.length} points valides (${pct}%) - ${missingCount} point(s) manquant(s)`;
+      doc.text(statusTxt, PW / 2, y + 5.8, { align: 'center' });
+      y += 14;
+
+      // ── SECTIONS ──
+      const sections = document.querySelectorAll('.section-items');
+      const sectionHeaders = document.querySelectorAll('.section-title');
+
+      sections.forEach((sec, si) => {
+        const title = sectionHeaders[si]?.textContent?.trim() || sectionTitles[si];
+        const items = sec.querySelectorAll('.item');
+
+        // Check page space
+        if (y > 260) { doc.addPage(); y = 14; }
+
+        // Section header
+        doc.setFillColor(...PINE);
+        doc.roundedRect(ML, y, CW, 7.5, 1.2, 1.2, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(255, 255, 255);
+        doc.text(title.toUpperCase(), ML + 4, y + 5, {});
+        // Count
+        const doneInSec = sec.querySelectorAll('.item.checked').length;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(212, 172, 110);
+        doc.text(`${doneInSec}/${items.length}`, ML + CW - 4, y + 5, { align: 'right' });
+        y += 10;
+
+        items.forEach((item, idx) => {
+          if (y > 272) { doc.addPage(); y = 14; }
+
+          const ok = item.classList.contains('checked');
+          const label = item.querySelector('.item-label').textContent.trim();
+          const note = item.querySelector('textarea')?.value?.trim() || '';
+          const ci = item.querySelector('.counter-input');
+          const rowH = note ? 7.5 : 6.5;
+          const rowBg = idx % 2 === 0 ? [252, 251, 249] : [245, 243, 238];
+
+          doc.setFillColor(...rowBg);
+          doc.rect(ML, y, CW, rowH, 'F');
+
+          // Checkbox circle
+          const cx = ML + 5, cy = y + rowH / 2;
+          if (ok) {
+            doc.setFillColor(...GREEN);
+            doc.circle(cx, cy, 2.2, 'F');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(255, 255, 255);
+            doc.text('V', cx, cy + 0.7, { align: 'center' });
+          } else {
+            doc.setDrawColor(...RED);
+            doc.setLineWidth(0.5);
+            doc.circle(cx, cy, 2.2, 'S');
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(7);
+            doc.setTextColor(...RED);
+            doc.text('X', cx, cy + 0.7, { align: 'center' });
+          }
+
+          // Label
+          doc.setFont('helvetica', ok ? 'normal' : 'bold');
+          doc.setFontSize(8);
+          const labelColor = ok ? GREY : PINE;
+          doc.setTextColor(labelColor[0], labelColor[1], labelColor[2]);
+
+          let labelText = label;
+          // Counter value
+          if (ci && ci.value !== '') {
+            const v = parseInt(ci.value);
+            const diff = ci.nextElementSibling.textContent;
+            const counterColor = ci.classList.contains('miss') ? RED : GREEN;
+            const shortLabel = label.split(/[0-9]/)[0].trim().replace(/\s+/g, ' ');
+            doc.text(shortLabel, ML + 10, y + rowH / 2 + 0.7);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(...counterColor);
+            doc.text(`> ${v} trouve(s)${diff ? ' (' + diff + ')' : ''}`, ML + 10 + doc.getTextWidth(shortLabel) + 2, y + rowH / 2 + 0.7);
+          } else {
+            const maxW = CW - 14;
+            const lines = doc.splitTextToSize(labelText, maxW);
+            const lc = ok ? GREY : PINE;
+            doc.setTextColor(lc[0], lc[1], lc[2]);
+            doc.text(lines[0], ML + 10, y + rowH / 2 + 0.7);
+          }
+
+          // Note
+          if (note) {
+            doc.setFont('helvetica', 'italic');
+            doc.setFontSize(7);
+            doc.setTextColor(...ORANGE);
+            const noteLines = doc.splitTextToSize('> ' + note, CW - 14);
+            doc.text(noteLines[0], ML + 10, y + rowH - 1.2);
+          }
+
+          // Bottom border
+          doc.setDrawColor(...LTGREY);
+          doc.setLineWidth(0.2);
+          doc.line(ML, y + rowH, ML + CW, y + rowH);
+
+          y += rowH;
+        });
+        y += 5;
+      });
+
+      // ── MISSING ITEMS SUMMARY ──
+      const missingItems = [];
+      document.querySelectorAll('.item').forEach(item => {
+        if (!item.classList.contains('checked')) {
+          missingItems.push(item.querySelector('.item-label').textContent.trim());
+        }
+      });
+
+      if (missingItems.length > 0) {
+        if (y > 245) { doc.addPage(); y = 14; }
+        doc.setFillColor(...RED);
+        doc.roundedRect(ML, y, CW, 7.5, 1.2, 1.2, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.setTextColor(255, 255, 255);
+        doc.text(`POINTS NON VALIDES (${missingItems.length})`, ML + 4, y + 5);
+        y += 10;
+        missingItems.forEach(m => {
+          if (y > 278) { doc.addPage(); y = 14; }
+          doc.setFillColor(253, 237, 236);
+          doc.rect(ML, y, CW, 6, 'F');
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(...RED);
+          const lines = doc.splitTextToSize('• ' + m, CW - 8);
+          doc.text(lines[0], ML + 4, y + 4);
+          y += 6;
+        });
+      } else {
+        if (y > 265) { doc.addPage(); y = 14; }
+        doc.setFillColor(240, 250, 244);
+        doc.roundedRect(ML, y, CW, 9, 1.5, 1.5, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...GREEN);
+        doc.text('Tous les points valides - Chalet pret !', PW / 2, y + 5.8, { align: 'center' });
+        y += 13;
+      }
+
+      // ── FOOTER ──
+      const pageCount = doc.getNumberOfPages();
+      for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFillColor(...LTGREY);
+        doc.rect(0, 291, PW, 6, 'F');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(...GREY);
+        doc.text(`Chalet Manora · La Tania · chaletmanora.com`, ML, 295.5);
+        doc.text(`Page ${p}/${pageCount}`, PW - MR, 295.5, { align: 'right' });
+      }
+
+      // ── SAVE PDF ──
+      const filename = `Manora_EdL_${tenant.replace(/\s+/g, '_')}_${dateVal.split(' ·')[0].replace(/\//g, '-')}.pdf`;
+      const pdfBlob = doc.output('blob');
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+
+      // Download PDF
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Show instructions
+      btn.innerHTML = '<span>✅</span> PDF téléchargé !';
+      btn.className = 'btn-send sent';
+      btn.disabled = false;
+
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      if (isIOS) {
+        statusEl.innerHTML = `📄 PDF enregistré dans vos fichiers.<br>
+          <strong>Comment envoyer sur WhatsApp :</strong><br>
+          1. Ouvrez WhatsApp → conversation avec Victor<br>
+          2. Appuyez sur 📎 → Document → Sélectionnez le PDF<br>
+          3. Envoyez !`;
+      } else {
+        // Android / desktop : ouvrir WhatsApp avec message
+        const waMsg = encodeURIComponent(
+          `📋 Manora — État des lieux\n👤 ${tenant}\n📅 ${dateVal}\n` +
+          `${missingCount === 0 ? '✅ Tout validé' : `⚠ ${missingCount} point(s) manquant(s)`}\n\n` +
+          `Le rapport PDF est joint.`
+        );
+        const waUrl = WHATSAPP_NUMBER
+          ? `https://wa.me/${WHATSAPP_NUMBER}?text=${waMsg}`
+          : `https://wa.me/?text=${waMsg}`;
+        setTimeout(() => window.open(waUrl, '_blank'), 500);
+        statusEl.innerHTML = `📄 PDF téléchargé. WhatsApp s'ouvre — joignez le PDF au message.`;
+      }
+      statusEl.className = 'send-status ok';
+
+    } catch(err) {
+      console.error('PDF error:', err);
+      btn.innerHTML = '<span>📲</span> Envoyer sur WhatsApp';
+      btn.disabled = false;
+      btn.className = 'btn-send';
+      statusEl.textContent = '⚠ Erreur : ' + err.message;
+      statusEl.className = 'send-status err';
+    }
+  }, 100);
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+function resetAll() {
+  if (!confirm('Réinitialiser toute la checklist ?')) return;
+  document.querySelectorAll('.item').forEach(i => { i.classList.remove('checked'); i.querySelector('input[type=checkbox]').checked = false; });
+  document.querySelectorAll('.counter-input').forEach(inp => { inp.value=''; inp.className='counter-input'; if(inp.nextElementSibling){inp.nextElementSibling.textContent='';inp.nextElementSibling.className='counter-status';} });
+  document.querySelectorAll('textarea').forEach(ta => ta.value = '');
+  document.querySelectorAll('.item-note-area').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.item-note-btn').forEach(b => { b.textContent='+ Note'; b.classList.remove('has-note'); });
+  const n = new Date();
+  document.getElementById('check-date').value = n.toLocaleDateString('fr-FR') + ' · ' + n.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('tenant-out').value = '';
+  document.getElementById('agent-name').value = '';
+  // Reset table widget
+  document.getElementById('guests-input').value = '';
+  document.getElementById('table-result').className = 'table-result';
+  document.getElementById('table-confirm').className = 'table-confirm';
+  document.getElementById('table-confirm-box').classList.remove('checked');
+  tableConfirmed = false;
+  document.getElementById('completion-badge').classList.remove('show');
+  updateProgress();
+}
+
+updateProgress();
+</script>
+</body>
+</html>
