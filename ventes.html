@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Chalet Manora — Ventes extras</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#F7F4EF; --snow:#FDFCFA; --pine:#2C3E2D; --pine-lt:#3D5C3F;
+  --gold:#B8965A; --gold-lt:#D4AC6E; --stone:#8C8278; --stone-lt:#C4BDB5;
+  --smoke:#EAE6DF; --danger:#C0392B; --ok:#2C7A4B; --warn:#B8730A; --radius:12px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--pine);min-height:100vh;font-size:15px;line-height:1.6;}
+header{background:var(--pine);color:var(--cream);padding:1.6rem 1.5rem 1.5rem;text-align:center;}
+.logo-line{display:flex;align-items:center;justify-content:center;gap:1rem;margin-bottom:0.4rem;}
+.logo-ornament{width:36px;height:1px;background:var(--gold);}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,2.2rem);font-weight:600;color:var(--snow);}
+.header-sub{font-size:0.75rem;font-weight:300;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-lt);margin-top:0.3rem;}
+.nav{margin-top:0.9rem;}
+.nav a{color:var(--gold-lt);font-size:0.8rem;text-decoration:none;border:1px solid rgba(212,172,110,0.5);border-radius:99px;padding:5px 14px;}
+.header-meta{margin-top:1.1rem;display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;}
+.meta-field{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:130px;max-width:210px;}
+.meta-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone-lt);}
+.meta-input{background:rgba(255,255,255,0.12);border:1.5px solid rgba(255,255,255,0.25);border-radius:8px;color:#fff;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:16px;width:100%;text-align:center;outline:none;-webkit-appearance:none;appearance:none;}
+.meta-input:focus{border-color:var(--gold);background:rgba(255,255,255,0.2);}
+.meta-input::placeholder{color:rgba(255,255,255,0.4);}
+.meta-input[type=date]{color-scheme:dark;}
+
+.totalbar{background:var(--pine);padding:0.7rem 1.5rem;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,0.18);}
+.totalbar-inner{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;color:var(--snow);}
+.totalbar .lbl{font-size:0.78rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone-lt);}
+.totalbar .amt{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--gold-lt);}
+
+main{max-width:720px;margin:0 auto;padding:1.25rem 1rem 4rem;}
+.section{margin-bottom:1.25rem;background:var(--snow);border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(44,62,45,0.07);border:1px solid var(--smoke);}
+.section-header{background:var(--pine);padding:0.75rem 1.25rem;display:flex;align-items:center;gap:0.7rem;}
+.section-icon{width:26px;height:26px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0;}
+.section-title{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;color:var(--snow);letter-spacing:0.03em;}
+.section-count{margin-left:auto;font-size:0.72rem;color:var(--stone-lt);font-weight:300;}
+
+.svc{display:flex;align-items:center;gap:0.6rem;padding:0.75rem 1rem 0.75rem 1.25rem;border-bottom:1px solid var(--smoke);}
+.svc:last-child{border-bottom:none;}
+.svc.active{background:#F0FAF4;box-shadow:inset 3px 0 0 var(--ok);}
+.svc-info{flex:1;min-width:0;}
+.svc-name{font-size:0.88rem;font-weight:500;line-height:1.35;}
+.svc-price{font-size:0.78rem;color:var(--stone);}
+.svc-price b{color:var(--gold);font-weight:500;}
+.svc-sub{font-size:0.8rem;color:var(--ok);font-weight:500;min-width:62px;text-align:right;}
+.qty{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.qty button{width:34px;height:34px;border-radius:8px;border:1.5px solid var(--stone-lt);background:#fff;color:var(--pine);font-size:1.15rem;line-height:1;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+.qty button:active{background:var(--smoke);}
+.qty input{width:52px;height:34px;border:1.5px solid var(--stone-lt);border-radius:7px;text-align:center;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:500;color:var(--pine);outline:none;-moz-appearance:textfield;}
+.qty input::-webkit-inner-spin-button,.qty input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.svc.active .qty input{border-color:var(--ok);background:#F0FAF4;color:var(--ok);}
+
+.note-area{padding:0.9rem 1.25rem;}
+.note-area textarea{width:100%;border:1px solid var(--stone-lt);border-radius:8px;padding:8px 11px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--pine);resize:vertical;min-height:58px;outline:none;background:#fff;}
+.note-area textarea:focus{border-color:var(--gold);}
+
+.actions{margin-top:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap;justify-content:center;}
+.btn-primary{background:var(--pine);color:var(--snow);border:none;border-radius:8px;padding:0.9rem 2rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:0.5rem;touch-action:manipulation;}
+.btn-primary:disabled{opacity:0.6;cursor:default;}
+.btn-secondary{background:transparent;color:var(--pine);border:1.5px solid var(--stone-lt);border-radius:8px;padding:0.9rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer;touch-action:manipulation;}
+.status{text-align:center;font-size:0.85rem;margin-top:0.9rem;min-height:1.3em;}
+.status.ok{color:var(--ok);} .status.err{color:var(--danger);}
+
+.week-row{display:flex;gap:0.6rem;padding:0.6rem 1.25rem;border-bottom:1px solid var(--smoke);font-size:0.82rem;}
+.week-row:last-child{border-bottom:none;}
+.week-row .d{color:var(--stone);min-width:46px;}
+.week-row .s{flex:1;}
+.week-row .s small{color:var(--stone);display:block;}
+.week-row .t{font-weight:500;white-space:nowrap;}
+.week-total{display:flex;justify-content:space-between;align-items:center;padding:0.9rem 1.25rem;background:var(--cream);border-top:2px solid var(--gold);}
+.week-total .l{font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--stone);}
+.week-total .v{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--pine);}
+.empty{padding:1rem 1.25rem;color:var(--stone);font-size:0.85rem;text-align:center;}
+.hint{font-size:0.78rem;color:var(--stone);padding:0.7rem 1.25rem 0.9rem;}
+.pick{display:flex;gap:0.5rem;align-items:center;padding:0.7rem 1.25rem;border-bottom:1px solid var(--smoke);font-size:0.82rem;color:var(--stone);}
+.pick input{border:1px solid var(--stone-lt);border-radius:7px;padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--pine);background:#fff;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-line"><div class="logo-ornament"></div><h1>Chalet Manora</h1><div class="logo-ornament"></div></div>
+  <div class="header-sub">Ventes d'extras · Conciergerie</div>
+  <div class="nav"><a href="index.html">← Checklist du samedi</a></div>
+  <div class="header-meta">
+    <div class="meta-field"><span class="meta-label">Date</span><input class="meta-input" type="date" id="f-date"></div>
+    <div class="meta-field"><span class="meta-label">Client / séjour</span><input class="meta-input" type="text" id="f-client" placeholder="Nom du client"></div>
+    <div class="meta-field"><span class="meta-label">Saisi par</span><input class="meta-input" type="text" id="f-par" placeholder="Prénom"></div>
+  </div>
+</header>
+
+<div class="totalbar"><div class="totalbar-inner">
+  <span class="lbl">Total de cette saisie</span><span class="amt" id="grand-total">0 €</span>
+</div></div>
+
+<main>
+  <div id="services"><div class="empty">Chargement des tarifs…</div></div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-icon">✎</div><div class="section-title">Note (facultatif)</div></div>
+    <div class="note-area"><textarea id="f-note" placeholder="Précisions : jour de livraison, nombre de personnes, demande particulière…"></textarea></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-secondary" onclick="resetForm()">Effacer</button>
+    <button class="btn-primary" id="btn-send" onclick="submitSale()"><span>✓</span> Enregistrer la vente</button>
+  </div>
+  <div class="status" id="status"></div>
+
+  <div class="section" style="margin-top:2rem;">
+    <div class="section-header"><div class="section-icon">€</div><div class="section-title">Semaine en cours</div><span class="section-count" id="week-label"></span></div>
+    <div class="pick"><span>Voir une autre semaine :</span><input type="date" id="pick-week" onchange="loadWeek(this.value)"></div>
+    <div id="week-list"><div class="empty">Chargement…</div></div>
+    <div class="week-total"><span class="l">Total à faire régler aux clients</span><span class="v" id="week-total">0 €</span></div>
+    <div class="hint">Semaine du samedi au vendredi. Les ventes saisies avant samedi midi entrent dans le bilan de la semaine.</div>
+  </div>
+</main>
+
+<script>
+// ─── À RENSEIGNER après le déploiement du script Google (URL se terminant par /exec)
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxv9idZQgV6eIfIdp4O6b5Tmgd5_WAzk4ROusM--YG6vbkvVRW2AUblfymRP3iH6wjl/exec';
+
+let TARIFS = [];
+const eur = n => Math.round(n).toLocaleString('fr-FR') + ' €';
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+
+document.getElementById('f-date').value = todayISO();
+document.getElementById('f-par').value = localStorage.getItem('manora_par') || '';
+document.getElementById('f-par').addEventListener('input', e => localStorage.setItem('manora_par', e.target.value));
+
+async function init() {
+  try {
+    const r = await fetch(SCRIPT_URL, { method: 'GET' });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur');
+    TARIFS = data.tarifs;
+    renderServices();
+    renderWeek(data.semaine);
+  } catch (err) {
+    document.getElementById('services').innerHTML = '<div class="empty">Impossible de charger les tarifs. Vérifiez la connexion.<br><small>' + err + '</small></div>';
+    document.getElementById('week-list').innerHTML = '<div class="empty">—</div>';
+  }
+}
+
+function renderServices() {
+  const el = document.getElementById('services');
+  el.innerHTML = `
+    <div class="section">
+      <div class="section-header"><div class="section-icon">✦</div><div class="section-title">Services vendus</div><span class="section-count">prix client</span></div>
+      ${TARIFS.map((t, i) => `
+        <div class="svc" id="svc-${i}">
+          <div class="svc-info">
+            <div class="svc-name">${t.service}</div>
+            <div class="svc-price"><b>${eur(t.prix)}</b> / ${t.unite}</div>
+          </div>
+          <div class="svc-sub" id="sub-${i}"></div>
+          <div class="qty">
+            <button type="button" onclick="bump(${i},-1)">−</button>
+            <input type="number" inputmode="numeric" min="0" id="q-${i}" value="" placeholder="0" oninput="update()">
+            <button type="button" onclick="bump(${i},1)">+</button>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function bump(i, d) {
+  const inp = document.getElementById('q-' + i);
+  inp.value = Math.max(0, (parseInt(inp.value) || 0) + d) || '';
+  update();
+}
+
+function update() {
+  let total = 0;
+  TARIFS.forEach((t, i) => {
+    const q = parseInt(document.getElementById('q-' + i).value) || 0;
+    const row = document.getElementById('svc-' + i), sub = document.getElementById('sub-' + i);
+    if (q > 0) { row.classList.add('active'); sub.textContent = eur(q * t.prix); total += q * t.prix; }
+    else { row.classList.remove('active'); sub.textContent = ''; }
+  });
+  document.getElementById('grand-total').textContent = eur(total);
+  return total;
+}
+
+function renderWeek(s) {
+  document.getElementById('week-label').textContent = 'du ' + s.semaineDu;
+  const list = document.getElementById('week-list');
+  if (!s.ventes.length) list.innerHTML = '<div class="empty">Aucune vente enregistrée cette semaine.</div>';
+  else list.innerHTML = s.ventes.map(v => `
+    <div class="week-row"><span class="d">${v.date.slice(0,5)}</span>
+      <span class="s">${v.service} × ${v.qte} <small>${v.client || ''}</small></span>
+      <span class="t">${eur(v.total)}</span></div>`).join('');
+  document.getElementById('week-total').textContent = eur(s.totalClient);
+}
+
+async function loadWeek(iso) {
+  if (!iso) return;
+  document.getElementById('week-list').innerHTML = '<div class="empty">Chargement…</div>';
+  try {
+    const r = await fetch(SCRIPT_URL + '?semaine=' + iso);
+    const data = await r.json();
+    renderWeek(data.semaine);
+  } catch (err) { document.getElementById('week-list').innerHTML = '<div class="empty">Erreur : ' + err + '</div>'; }
+}
+
+async function submitSale() {
+  const btn = document.getElementById('btn-send'), st = document.getElementById('status');
+  const lignes = TARIFS.map((t, i) => ({ service: t.service, unite: t.unite, qte: parseInt(document.getElementById('q-' + i).value) || 0 })).filter(l => l.qte > 0);
+  const client = document.getElementById('f-client').value.trim();
+  const par = document.getElementById('f-par').value.trim();
+  if (!lignes.length) { st.textContent = 'Indiquez au moins un service.'; st.className = 'status err'; return; }
+  if (!client) { st.textContent = 'Indiquez le nom du client.'; st.className = 'status err'; return; }
+  if (!par) { st.textContent = 'Indiquez votre prénom.'; st.className = 'status err'; return; }
+
+  btn.disabled = true; btn.innerHTML = '<span>⏳</span> Envoi…'; st.textContent = ''; st.className = 'status';
+  try {
+    const r = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ date: document.getElementById('f-date').value, client, par, note: document.getElementById('f-note').value.trim(), lignes })
+    });
+    const data = await r.json();
+    if (!data.ok) throw new Error(data.error || 'Erreur inconnue');
+    st.textContent = 'Vente enregistrée : ' + eur(data.totalClient) + '. Victor a reçu un email.';
+    st.className = 'status ok';
+    renderWeek(data.semaine);
+    resetForm(false);
+  } catch (err) {
+    st.textContent = 'Erreur : ' + err.message; st.className = 'status err';
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<span>✓</span> Enregistrer la vente';
+  }
+}
+
+function resetForm(ask) {
+  if (ask !== false && !confirm('Effacer la saisie en cours ?')) return;
+  TARIFS.forEach((t, i) => document.getElementById('q-' + i).value = '');
+  document.getElementById('f-client').value = '';
+  document.getElementById('f-note').value = '';
+  update();
+}
+
+init();
+</script>
+</body>
+</html>
